@@ -8,9 +8,23 @@ server.connection({
 		cors: true //Cross-origin resource sharing is a mechanism that enables many resources on a webpage
 	}
 });
+// var yarOptions = {
+// 	cookieOptions:{
+// 		password:'password',//password to access password base
+// 		isSecure: false // you can use it without HTTPS
+// 	}
+// };
+
+// server.register({
+// 	register: require('yar'),
+// 	options: yarOptions
+// },function(err){
+//  //do nothing with error
+// });
 
 var plugins = [
 	{ register: require('./routes/users.js')},
+	{ register: require('./routes/sessions.js')},
 	{
 		register:require('hapi-mongodb'),
 		options: {
@@ -19,6 +33,15 @@ var plugins = [
 				"db":{
 					"native_parser": false
 				}
+			}
+		}
+	},
+	{
+		register: require('yar'),
+		options:{
+			cookieOptions:{
+				password:'password',//password to access password base
+				isSecure: false // you can use it without HTTPS
 			}
 		}
 	}
