@@ -1,5 +1,6 @@
 var Bcrypt = require('bcrypt');
 var Joi = require('joi');
+var Auth = require('./auth');
 
 exports.register = function(server,options,next){
 
@@ -51,6 +52,33 @@ exports.register = function(server,options,next){
 		      });
 		    }
 	    }
+	  },
+	  {
+	  	method: "GET",
+	  	path: "/authenticated",
+	  	handler: function(request,reply){
+	  		Auth.authenticated(request,function(result){
+	  			reply(result);
+	  		});
+	  	}
+	  },
+	  {
+	  	method: "DELETE",
+	  	path: "/sessions",
+	  	handler: function(request,reply){
+	  		var session = request.session.get("twitter_session");
+	  		var db = request.server.plugins['hapi-mongodb'].db;
+
+	  		if(!session){
+	  			return reply({'message':'Already logged out'})
+	  			//return will terminate the test of program
+	  		}
+
+	  		db.collection('sessions').remove({'session_id':session.session_key}, function(err, writeResult){
+	  			if (err) {return reply('Internal Mongo error',err);}
+	  			return reply(writeResult);
+	  		});
+	  	}
 	  }
 	]);
     
