@@ -5,7 +5,7 @@ var Auth = require('./auth');
 exports.register = function(server,options,next){
 
 	server.route([ 
-		{//user signup
+		{//user login
 	    method: 'POST',
 	    path: '/sessions',
 	    config: {
@@ -94,14 +94,18 @@ exports.register = function(server,options,next){
 	  },
 	  {//get all tweets by specific user
 	  	method: "GET",
-	  	path: "user/{username}/tweets",
+	  	path: "/users/{username}/tweets",
 	  	handler: function(request,reply){
 	  		var db = request.server.plugins['hapi-mongodb'].db;
+	  		var username = encodeURIComponent(request.params.username);
 
-	  		db.collection('tweets').find().toArray(function(err, tweets){
+	  		db.collection('users').findOne({"username":username},function(err, user){
 	  			if (err) {return reply('Internal Mongo error',err);}
-	  			return reply(tweets);
-	  		});
+	  			db.collection('tweets').find({"user_id":user._id}).toArray(function(err, tweets){
+	  				if (err) {return reply('Internal Mongo error',err);}
+	  				return reply(tweets);
+	  			});
+		   	});
 	  	}
 	  }
 
