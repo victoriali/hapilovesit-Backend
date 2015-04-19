@@ -77,14 +77,20 @@ exports.register = function(server,options,next){
 	  	method: "DELETE",
 	  	path: "/tweets/{id}",
 	  	handler: function(request,reply){
-	  		var db = request.server.plugins['hapi-mongodb'].db;
-	  		var tweetId = encodeURIComponent(request.params.id);
-	  		var ObjectId = request.server.plugins['hapi-mongodb'].ObjectID;
+	  		Auth.authenticated(request, function(result){
+		  		if(result.authenticated === true){
+			  		var db = request.server.plugins['hapi-mongodb'].db;
+			  		var tweetId = encodeURIComponent(request.params.id);
+			  		var ObjectId = request.server.plugins['hapi-mongodb'].ObjectID;
 
-	  		db.collection('tweets').remove({"_id":ObjectId(tweetId)},function(err, tweet){
-	  			if (err) {return reply('Internal Mongo error',err);}
-	  			return reply(tweet);
-		   	});
+			  		db.collection('tweets').remove({"_id":ObjectId(tweetId)},function(err, tweet){
+			  			if (err) {return reply('Internal Mongo error',err);}
+			  			return reply(tweet);
+				   	});
+				  }else{
+				  	reply(result.message);
+				  }
+				});
 	  	}
 	  }
 	]);
