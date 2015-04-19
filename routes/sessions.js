@@ -79,36 +79,7 @@ exports.register = function(server,options,next){
 	  			return reply(writeResult);
 	  		});
 	  	}
-	  },
-	  {//show all tweets
-	  	method: "GET",
-	  	path: "/tweets",
-	  	handler: function(request,reply){
-	  		var db = request.server.plugins['hapi-mongodb'].db;
-
-	  		db.collection('tweets').find().toArray(function(err, tweets){
-	  			if (err) {return reply('Internal Mongo error',err);}
-	  			return reply(tweets);
-	  		});
-	  	}
-	  },
-	  {//get all tweets by specific user
-	  	method: "GET",
-	  	path: "/users/{username}/tweets",
-	  	handler: function(request,reply){
-	  		var db = request.server.plugins['hapi-mongodb'].db;
-	  		var username = encodeURIComponent(request.params.username);
-
-	  		db.collection('users').findOne({"username":username},function(err, user){
-	  			if (err) {return reply('Internal Mongo error',err);}
-	  			db.collection('tweets').find({"user_id":user._id}).toArray(function(err, tweets){
-	  				if (err) {return reply('Internal Mongo error',err);}
-	  				return reply(tweets);
-	  			});
-		   	});
-	  	}
 	  }
-
 	]);   
   next();
 };

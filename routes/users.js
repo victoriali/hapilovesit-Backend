@@ -74,6 +74,6 @@ exports.register = function(server,options,next){
 
 
 exports.register.attributes = {
-    name: 'users-route',
+    name: 'users-routes',//!!!!
     version: '0.0.1'
 }
