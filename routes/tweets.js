@@ -8,9 +8,10 @@ exports.register = function(server,options,next){
 	  	method: "GET",
 	  	path: "/tweets",
 	  	handler: function(request,reply){
+	  		console.log('hi');
 	  		var db = request.server.plugins['hapi-mongodb'].db;
 
-	  		db.collection('tweets').find().toArray(function(err, tweets){
+	  		db.collection('tweets').find().limit(5).toArray(function(err, tweets){
 	  			if (err) {return reply('Internal Mongo error',err);}
 	  			return reply(tweets);
 	  		});
@@ -56,7 +57,15 @@ exports.register = function(server,options,next){
 		  				reply({"message":"Not Authorised"})
 		  			};
 		  		});
-		  	}
+		  	},
+		  	validate: {
+		      payload: {
+		        tweet: {
+		          // Required, Limited to 140 chars
+		          message: Joi.string().max(140).required()
+		        }
+		      }
+    		}
 		  }	
 	  },
 	  {//reading a single tweet

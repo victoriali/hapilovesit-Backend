@@ -3,7 +3,7 @@ var server = new Hapi.Server(); // we take Server.js from Hapi library
 
 server.connection({
 	host:'0.0.0.0', //same as localhost
-	port: process.env.PORT || 3000, //What is process.env.PORT? It's an environment variable prepared by Heroku Deployment
+	port: process.env.PORT || 80, //What is process.env.PORT? It's an environment variable prepared by Heroku Deployment
 	routes: {
 		cors: {
       headers: ['Access-Control-Allow-Credentials'],
