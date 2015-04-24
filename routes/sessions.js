@@ -5,7 +5,8 @@ var Auth = require('./auth');
 exports.register = function(server,options,next){
 
 	server.route([ 
-		{//user login
+		//User login (create session)
+		{
 	    method: 'POST',
 	    path: '/sessions',
 	    config: {
@@ -31,17 +32,17 @@ exports.register = function(server,options,next){
 
 	  						var newSession = {
 	  							"session_id":randomKey,
-	  							"user_id":userMongo._id
+	  							"user_id":userMongo._id,
+	  							"username":userMongo.username//!!!!!!
 	  						};
-
+	  					//take the random key to database
 	  						db.collection('sessions').insert(newSession,function(err,writeResult){
 	  							if (err) {return reply('Internal Mongo error',err);}
-	  							//Yar
-	  							request.session.set("twitter_session",{
+	  					//send the same random key to browser
+	  							request.session.set("account_session",{
 	  								"session_key":randomKey,
 	  								"user_id":userMongo._id
 	  							});
-
 	  							return reply(writeResult);
 	  						});
 
@@ -53,7 +54,8 @@ exports.register = function(server,options,next){
 		    }
 	    }
 	  },
-	  {//match with database?
+	  //Match with database?
+	  {
 	  	method: "GET",
 	  	path: "/authenticated",
 	  	handler: function(request,reply){
@@ -62,16 +64,16 @@ exports.register = function(server,options,next){
 	  		});
 	  	}
 	  },
-	  {//logout
+	  //User logout (delete session)
+	  {
 	  	method: "DELETE",
 	  	path: "/sessions",
 	  	handler: function(request,reply){
-	  		var session = request.session.get("twitter_session");
+	  		var session = request.session.get("account_session");
 	  		var db = request.server.plugins['hapi-mongodb'].db;
 
 	  		if(!session){
 	  			return reply({'message':'Already logged out'})
-	  			//return will terminate the test of program
 	  		}
 
 	  		db.collection('sessions').remove({'session_id':session.session_key}, function(err, writeResult){

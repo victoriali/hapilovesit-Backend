@@ -4,25 +4,8 @@ var Joi = require('joi');
 exports.register = function(server,options,next){
 
 	server.route([ 
-	  {
-	    //retrieve all users
-	    method: 'GET',
-	    path: '/users',
-	    handler: function(request, reply){
-	      var db =request.server.plugins['hapi-mongodb'].db;
-
-	      db.collection('users').find().toArray(function(err, users) {
-	          if (err) { 
-	              return reply('Internal MongoDB error', err);
-	          }
-
-	          reply(users);
-	      });
-	    }
-	  },
-
-	  {
-	    //creating users
+		//Sign Up-- Create an new user
+		{
 	    method: 'POST',
 	    path: '/users',
 	    config: {
@@ -40,9 +23,8 @@ exports.register = function(server,options,next){
 				      ]};
 
 				      db.collection('users').count(uniqUserQuery, function(err, userExist){
-				      	//if user already exists
 				      	if (userExist) {
-				      		return reply('Error: Username already exist',err);
+				      		return reply({"Error": "Username already exist"});
 				      	}
 
 					      db.collection('users').insert(newUser,function(err, writeResult) {
@@ -66,14 +48,28 @@ exports.register = function(server,options,next){
 	    	}
 	    }
 	  }
-	]);
-    
-    
+	  // {
+	  //   //retrieve all users
+	  //   method: 'GET',
+	  //   path: '/users',
+	  //   handler: function(request, reply){
+	  //     var db =request.server.plugins['hapi-mongodb'].db;
+
+	  //     db.collection('users').find().toArray(function(err, users) {
+	  //         if (err) { 
+	  //             return reply('Internal MongoDB error', err);
+	  //         }
+
+	  //         reply(users);
+	  //     });
+	  //   }
+	  // },
+	]);  
   next();
 };
 
 
 exports.register.attributes = {
-    name: 'users-routes',//!!!!
+    name: 'users-routes',
     version: '0.0.1'
 }

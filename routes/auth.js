@@ -1,7 +1,7 @@
 module.exports = {},
 
 module.exports.authenticated = function(request,callback){
-	var session = request.session.get("twitter_session");
+	var session = request.session.get("account_session");
 	var db = request.server.plugins['hapi-mongodb'].db;
 
 	if(!session){
@@ -21,7 +21,8 @@ module.exports.authenticated = function(request,callback){
 		} else{
 			return callback({
 				"message":"Authenticated",
-				'authenticated':true
+				'authenticated':true,
+				user: result.username
 			});
 		}
 	});
