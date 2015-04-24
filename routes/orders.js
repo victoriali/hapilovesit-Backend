@@ -43,7 +43,7 @@ exports.register = function(server,options,next){
         handler: function(request, reply) {
           // first authenticate the user
           Auth.authenticated(request, function(result){
-          	
+
             if(result.authenticated) {
             
               var db = request.server.plugins['hapi-mongodb'].db;
@@ -57,7 +57,7 @@ exports.register = function(server,options,next){
                 var order = {
                   'user_id': ObjectId(session.user_id),
                   // 'username': session.username,
-                  'items': request.payload.order,
+                  'items': request.payload.order.items,
                   // 'items': [{
 	                 //  'name': request.payload.order.itemName,
 	                 //  'quantity': request.payload.order.itemQuantity,
