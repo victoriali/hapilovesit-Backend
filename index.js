@@ -16,6 +16,7 @@ var plugins = [
 	{ register: require('./routes/users.js')},
 	{ register: require('./routes/sessions.js')},
 	{ register: require('./routes/orders.js')},
+	{ register: require('./routes/pastboxes.js')},
 	{
 		register:require('hapi-mongodb'),
 		options: {

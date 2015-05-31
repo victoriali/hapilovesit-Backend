@@ -58,11 +58,6 @@ exports.register = function(server,options,next){
                   'user_id': ObjectId(session.user_id),
                   // 'username': session.username,
                   'items': request.payload.order.items,
-                  // 'items': [{
-	                 //  'name': request.payload.order.itemName,
-	                 //  'quantity': request.payload.order.itemQuantity,
-	                 //  'price': request.payload.order.itemPrice
-                  // }],
                   // 'shipping': {
 	                 //  'FirstName': request.payload.order.shipping.FirstName,
 	                 //  'LastName': request.payload.order.shippingLastName,
