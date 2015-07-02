@@ -1,4 +1,4 @@
-var Hapi = require('Hapi'); //go to node_modules to see if it can find it ()
+var Hapi = require('hapi'); //go to node_modules to see if it can find it ()
 var server = new Hapi.Server(); // we take Server.js from Hapi library
 
 server.connection({
@@ -39,6 +39,14 @@ var plugins = [
 		}
 	}
 ];
+
+server.route({
+	method: 'GET',
+	path: '/',
+	handler: function (request,reply) {
+		reply('<h1> Hi! </h1>');
+	}
+});
 
 server.register(plugins,function(err) {//server please recognise these plugin(libaries)
 	if (err) {

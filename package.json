@@ -4,8 +4,14 @@
   "description": "A backend API for Twitter built with Hapi and Mongo",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
+
+  "engines":{
+    "node": "0.12.2"
+  },
+  
   "author": "victoria",
   "license": "ISC",
   "dependencies": {
